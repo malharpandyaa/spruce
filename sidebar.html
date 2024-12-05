@@ -1,0 +1,118 @@
+<!-- sidebar.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sidebar</title>
+  <!-- Include styles and fonts -->
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+    }
+    #sidebar {
+      width: 50px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .sidebar-button {
+      width: 40px;
+      height: 40px;
+      margin: 10px 0;
+      background-color: #66bb6a;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    .sidebar-button:hover {
+      background-color: #57a05d;
+    }
+    .sidebar-button i {
+      pointer-events: none;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <!-- Dashboard Button -->
+    <div id="dashboard-button" class="sidebar-button"><i class="fas fa-th-large"></i></div>
+
+    <!-- Git Button -->
+    <div id="git-button" class="sidebar-button"><i class="fas fa-code-branch"></i></div>
+
+    <!-- Minimized Windows Buttons -->
+    <div id="clipboard-button" class="sidebar-button hidden"><i class="fas fa-clipboard"></i></div>
+    <div id="notes-button" class="sidebar-button hidden"><i class="fas fa-sticky-note"></i></div>
+    <div id="tasks-button" class="sidebar-button hidden"><i class="fas fa-tasks"></i></div>
+  </div>
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    const buttons = {
+      clipboard: document.getElementById('clipboard-button'),
+      notes: document.getElementById('notes-button'),
+      tasks: document.getElementById('tasks-button'),
+    };
+
+    // Handle window minimized event
+    ipcRenderer.on('window-minimized', (event, windowName) => {
+      buttons[windowName].classList.remove('hidden');
+    });
+
+    // Handle window restored event
+    ipcRenderer.on('window-restored', (event, windowName) => {
+      buttons[windowName].classList.add('hidden');
+    });
+
+    // Handle window closed event
+    ipcRenderer.on('window-closed', (event, windowName) => {
+      buttons[windowName].classList.add('hidden');
+    });
+
+    // Add click event listeners to buttons
+    buttons.clipboard.addEventListener('click', () => {
+      ipcRenderer.send('restore-window', 'clipboard');
+    });
+
+    buttons.notes.addEventListener('click', () => {
+      ipcRenderer.send('restore-window', 'notes');
+    });
+
+    buttons.tasks.addEventListener('click', () => {
+      ipcRenderer.send('restore-window', 'tasks');
+    });
+
+    // Dashboard button
+    const dashboardButton = document.getElementById('dashboard-button');
+    dashboardButton.addEventListener('click', () => {
+      ipcRenderer.send('restore-window', 'dashboard');
+    });
+
+    // Git button
+    const gitButton = document.getElementById('git-button');
+    gitButton.addEventListener('click', () => {
+      ipcRenderer.send('restore-window', 'git');
+    });
+  </script>
+</body>
+</html>

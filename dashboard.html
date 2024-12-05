@@ -1,0 +1,203 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <!-- Include styles and fonts -->
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    #project-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    #project-list li {
+      padding: 10px;
+      background-color: #c8e6c9;
+      margin-bottom: 5px;
+      border-radius: 4px;
+    }
+
+    #project-list li.active {
+      background-color: #a5d6a7;
+    }
+
+    #project-list li .project-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #project-list li span {
+      flex-grow: 1;
+    }
+
+    #project-list li button {
+      margin-left: 5px;
+    }
+
+    #new-project {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    #new-project input {
+      flex-grow: 1;
+      margin-right: 5px;
+    }
+
+    .remote-url {
+      width: 100%;
+      margin-top: 5px;
+      padding: 8px;
+      border: 1px solid #a5d6a7;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color: #f1f8e9;
+    }
+  </style>
+</head>
+<body>
+  <h2>Projects</h2>
+  <div id="new-project">
+    <input type="text" id="project-name" placeholder="New project name" />
+    <button id="add-project">Add</button>
+  </div>
+  <ul id="project-list"></ul>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+    const fs = require('fs');
+    const path = require('path');
+
+    let activeProject = 'Default';
+    let projects = [];
+
+    const projectList = document.getElementById('project-list');
+    const projectNameInput = document.getElementById('project-name');
+    const addProjectButton = document.getElementById('add-project');
+
+    // Load projects from storage
+    function loadProjects() {
+      const projectsPath = path.join(__dirname, 'projects.json');
+      if (fs.existsSync(projectsPath)) {
+        projects = JSON.parse(fs.readFileSync(projectsPath, 'utf8'));
+      } else {
+        projects = [{ name: 'Default', remote: '' }];
+        saveProjects();
+      }
+    }
+
+    // Save projects to storage
+    function saveProjects() {
+      const projectsPath = path.join(__dirname, 'projects.json');
+      fs.writeFileSync(projectsPath, JSON.stringify(projects));
+    }
+
+    // Render project list
+    function renderProjects() {
+      projectList.innerHTML = '';
+      projects.forEach((project) => {
+        const listItem = document.createElement('li');
+        if (project.name === activeProject) {
+          listItem.classList.add('active');
+        }
+
+        const projectInfoDiv = document.createElement('div');
+        projectInfoDiv.className = 'project-info';
+
+        const projectSpan = document.createElement('span');
+        projectSpan.textContent = project.name;
+
+        const selectButton = document.createElement('button');
+        selectButton.textContent = 'Select';
+        selectButton.addEventListener('click', () => {
+          activeProject = project.name;
+          ipcRenderer.send('switch-project', activeProject);
+          renderProjects();
+        });
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => {
+          if (project.name === 'Default') {
+            alert('Cannot delete the Default project.');
+            return;
+          }
+          projects = projects.filter((p) => p.name !== project.name);
+          deleteProjectData(project.name);
+          saveProjects();
+          if (activeProject === project.name) {
+            activeProject = 'Default';
+            ipcRenderer.send('switch-project', activeProject);
+          }
+          renderProjects();
+        });
+
+        projectInfoDiv.appendChild(projectSpan);
+        projectInfoDiv.appendChild(selectButton);
+        projectInfoDiv.appendChild(deleteButton);
+
+        // Remote repository URL input
+        const remoteInput = document.createElement('input');
+        remoteInput.type = 'text';
+        remoteInput.placeholder = 'Remote repository URL';
+        remoteInput.value = project.remote || '';
+        remoteInput.className = 'remote-url';
+
+        remoteInput.addEventListener('change', () => {
+          project.remote = remoteInput.value.trim();
+          saveProjects();
+        });
+
+        listItem.appendChild(projectInfoDiv);
+        listItem.appendChild(remoteInput);
+
+        projectList.appendChild(listItem);
+      });
+    }
+
+    // Delete project data
+    function deleteProjectData(projectName) {
+      const dataDir = path.join(__dirname, 'data', projectName);
+      if (fs.existsSync(dataDir)) {
+        fs.rmSync(dataDir, { recursive: true, force: true });
+      }
+    }
+
+    // Add new project
+    addProjectButton.addEventListener('click', () => {
+      const projectName = projectNameInput.value.trim();
+      if (projectName && !projects.some((p) => p.name === projectName)) {
+        projects.push({ name: projectName, remote: '' });
+        saveProjects();
+        renderProjects();
+        projectNameInput.value = '';
+      } else {
+        alert('Invalid project name or project already exists.');
+      }
+    });
+
+    // Receive initialization data
+    ipcRenderer.on('initialize-dashboard', (event, currentProject) => {
+      activeProject = currentProject;
+      loadProjects();
+      renderProjects();
+    });
+  </script>
+</body>
+</html>

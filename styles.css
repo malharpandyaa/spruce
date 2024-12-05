@@ -1,0 +1,195 @@
+/* styles.css */
+
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #e8f5e9; /* Light green background */
+  color: #1b5e20; /* Dark green text */
+}
+
+h2 {
+  margin-top: 0;
+  color: #ffffff; /* White text in header */
+}
+
+section {
+  margin: 0;
+  padding: 10px;
+}
+
+/* Buttons */
+button {
+  background-color: #66bb6a; /* Green button background */
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #57a05d; /* Darker green on hover */
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Input Fields */
+input[type="text"], textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #a5d6a7; /* Light green border */
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #f1f8e9; /* Very light green */
+}
+
+input[type="text"]:focus, textarea:focus {
+  border-color: #81c784; /* Darker green border on focus */
+  outline: none;
+}
+
+/* Lists */
+#clipboard-list, #task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#clipboard-list li, #task-list li {
+  background: #c8e6c9; /* Light green list item background */
+  margin-bottom: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#clipboard-list li span, #task-list li span {
+  flex-grow: 1;
+  margin-right: 10px;
+  word-break: break-word; /* Adjusted for better text wrapping */
+  color: #1b5e20; /* Dark green text */
+}
+
+/* Buttons within List Items */
+.copy-button, .delete-clipboard, .delete-task {
+  background: none;
+  border: none;
+  color: #1b5e20; /* Dark green */
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.copy-button:hover, .delete-clipboard:hover, .delete-task:hover {
+  color: #388e3c; /* Darker green on hover */
+}
+
+.copy-button i, .delete-clipboard i, .delete-task i {
+  pointer-events: none; /* Ensures icons are not separately clickable */
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e0f2f1; /* Light green */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #81c784; /* Medium green */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #66bb6a; /* Darker green on hover */
+}
+
+/* Notes Area */
+#notes-area {
+  height: calc(100% - 20px); /* Adjust height to fill window */
+  resize: none;
+  box-sizing: border-box;
+}
+
+/* Window Header */
+.window-header {
+  display: flex;
+  align-items: center;
+  background-color: #66bb6a; /* Green header */
+  padding: 5px;
+}
+
+.window-header h2 {
+  flex-grow: 1;
+  margin: 0;
+  color: white;
+  font-size: 18px;
+}
+
+.window-header #minimize-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.window-header #minimize-button:hover {
+  color: #e0f2f1; /* Lighter color on hover */
+}
+
+/* Body Padding */
+body {
+  padding: 0;
+  margin: 0;
+}
+
+/* Clipboard Content */
+.clipboard-content {
+  flex-grow: 1;
+  margin-right: 10px;
+  word-break: break-word;
+  color: #1b5e20;
+}
+
+/* Image Styling */
+.clipboard-content img {
+  max-width: 100%;
+  max-height: 100px;
+  border-radius: 4px;
+}
+
+/* Optional Background Image */
+/*
+body {
+  background-image: url('nature-background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+*/
+
+/* Overlay for Readability */
+/*
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(232, 245, 233, 0.95); 
+  pointer-events: none;
+}
+*/

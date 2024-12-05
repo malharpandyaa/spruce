@@ -1,0 +1,66 @@
+<!-- git.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Git Interface</title>
+  <!-- Include styles and fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional styles for the Git window */
+    body {
+      font-family: 'Roboto', sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    .git-section {
+      margin-bottom: 20px;
+    }
+    .git-section button {
+      margin-right: 10px;
+    }
+    #git-output {
+      background-color: #f1f8e9;
+      padding: 10px;
+      border: 1px solid #a5d6a7;
+      border-radius: 4px;
+      height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    #commit-message {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #a5d6a7;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color: #f1f8e9;
+    }
+  </style>
+</head>
+<body>
+  <h2>Git Interface</h2>
+  <div class="git-section">
+    <button id="git-init">Initialize Repository</button>
+    <button id="git-status">Status</button>
+    <button id="git-add">Add All Changes</button>
+    <button id="git-commit">Commit</button>
+    <button id="git-push">Push</button>
+    <button id="git-pull">Pull</button>
+  </div>
+  <div class="git-section">
+    <input type="text" id="commit-message" placeholder="Commit message" />
+  </div>
+  <div id="git-output"></div>
+
+  <script src="git.js"></script>
+</body>
+</html>

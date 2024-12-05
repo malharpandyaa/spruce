@@ -1,0 +1,17 @@
+{
+  "name": "desktop-overlay-app",
+  "version": "1.0.0",
+  "description": "An Electron application with clipboard history, notes, tasks, project management, and Git integration.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . desktop-overlay-app --platform=win32 --arch=x64 --icon=app.ico"
+  },
+  "dependencies": {
+    "electron": "^24.3.1",
+    "simple-git": "^3.27.0"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "MIT"
+}

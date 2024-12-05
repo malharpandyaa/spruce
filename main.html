@@ -1,0 +1,68 @@
+<!-- main.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Main Control</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional styles specific to main.html */
+    body {
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    #main-control button {
+      width: 100%;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="main-control">
+    <h2>Main Control Panel</h2>
+    <button id="add-clipboard">Add Clipboard Window</button>
+    <button id="add-notes">Add Notes Window</button>
+    <button id="add-tasks">Add Tasks Window</button>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    const clipboardButton = document.getElementById('add-clipboard');
+    const notesButton = document.getElementById('add-notes');
+    const tasksButton = document.getElementById('add-tasks');
+
+    clipboardButton.addEventListener('click', () => {
+      ipcRenderer.send('open-window', 'clipboard');
+      clipboardButton.disabled = true;
+    });
+
+    notesButton.addEventListener('click', () => {
+      ipcRenderer.send('open-window', 'notes');
+      notesButton.disabled = true;
+    });
+
+    tasksButton.addEventListener('click', () => {
+      ipcRenderer.send('open-window', 'tasks');
+      tasksButton.disabled = true;
+    });
+
+    ipcRenderer.on('window-closed', (event, windowName) => {
+      if (windowName === 'clipboard') {
+        clipboardButton.disabled = false;
+      } else if (windowName === 'notes') {
+        notesButton.disabled = false;
+      } else if (windowName === 'tasks') {
+        tasksButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
